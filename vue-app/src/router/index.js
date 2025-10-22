@@ -9,9 +9,15 @@ import AboutUs from '../views/AboutUs.vue'
 const routes = [
   { path: '/', name: 'home', component: Home },
   { path: '/add-package', name: 'add-package', component: AddPackage },
-  { path: '/package/:id', name: 'package', component: PackageView },  
-  { path: '/about-us', name: 'about-us', component: AboutUs } 
+   {
+    path: '/myPackage/:id',
+    name: 'myPackage',
+    component: PackageView
+  },  
+  { path: '/about-us', name: 'about-us', component: AboutUs } ,
+  
 ]
+
 
 const router = createRouter({
   history: createWebHistory(),
