@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+.hero-header {
+    background-image: url('https://images.pexels.com/photos/772686/pexels-photo-772686.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+
+.galerie img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn-jade {
+  background-color: #00A86B; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 5px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+.btn-jade:hover {
+  background-color: #006f4f; 
+}
