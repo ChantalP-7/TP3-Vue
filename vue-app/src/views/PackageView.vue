@@ -17,7 +17,7 @@
       </div>
 
       <!-- Navigation entre les images -->
-      <div class="flex justify-between mt-4">
+      <div class="flex justify-start gap-50 mt-4">
         <button class="btn-jade" @click="prevImage" :disabled="currentIndex === 0">Précédente</button>
         <button class="btn-jade" @click="nextImage" :disabled="currentIndex === myPackage.images.length - 1">Suivante</button>
       </div>
