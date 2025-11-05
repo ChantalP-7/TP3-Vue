@@ -1,95 +1,127 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center border-t border-gray-100">
-    <div class="border mt-2 p-6 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3">
-      <div class="bg-red-500 mb-2 text-white p-2 rounded">Message d'erreur</div>
-      <h2 class="text-2xl font-semibold mb-6">Ajoute un forfait</h2>
-      <div>
-        <form>
-          <div class="mb-4">
-            <label for="packageName" class="block text-sm font-medium text-gray-700">Product Name</label>
-            <input v-model="package.name" type="text" id="packageName" class="mt-1 p-2 border w-full rounded-md" required />
+  <div class="min-h-screen flex items-center justify-center border-t border-gray-300">
+    <div class="grid-container border border-gray-300 mt-2 p-6 rounded-md md:w-2/3 lg:w-1/2 xl:w-1/3">
+      
+      <div v-if="errorMessage" class="bg-red-500 mb-2 text-white p-2 rounded">{{ errorMessage }}</div>
+      <h4 class="text-xl font-semibold mb-6">Ajoute un forfait</h4>
+
+      <form class="space-y-4" >
+        <!-- Nom du produit -->
+        <div class="form-control mt-5">
+          <label for="packageName" class="block text-sm font-medium text-gray-700">Nom du produit</label>
+          <input v-model="myPackage.name" type="text" id="packageName" class="w-full p-2 border rounded" required />
+        </div>
+
+        <!-- Prix -->
+        <div class="form-control mt-5">
+          <label for="packagePrice" class="block text-sm font-medium text-gray-700">Prix (CAD)</label>
+          <input v-model="myPackage.price" type="text" id="packagePrice" class="w-full p-2 border rounded" required />
+        </div>
+
+        <!-- Description -->
+        <div class="form-control mt-5">
+          <label for="packageDescription" class="block text-sm font-medium text-gray-700">Description du forfait</label>
+          <textarea v-model="myPackage.description" id="packageDescription" rows="5"  class="w-full p-2 border rounded" required></textarea>
+        </div>
+        <div class="form-control mt-5">          
+          <select v-model="myPackage.category_id" id="packageCategory" class="mt-1 p-2 border w-full rounded-md" required>
+            <option disabled value="">Sélectionne une catégorie</option>
+            <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.category }}</option>
+          </select>
+        </div>
+
+        <!-- Images -->
+        <div class="mt-5">
+          <label class="block text-gray-700 mb-2">Images (URLs, max 5)</label>
+          <div v-for="(url, index) in myPackage.images" :key="index" class="form-control mt-2 flex items-center gap-2">
+            <input
+              v-model="myPackage.images[index]"
+              type="url"
+              placeholder="https://exemple.com/image.jpg"
+              class="flex-1 border text-gray-300 text-sm rounded-lg px-3 py-2 focus:ring focus:ring-blue-300"
+            />
+            <button type="button" @click="removeImage(index)" class="bg-red-500 text-white rounded-full px-2 py-1 text-sm hover:bg-red-600">✕</button>
           </div>
-          <div class="mb-4">
-            <label for="packagePhoto" class="block text-sm font-medium text-gray-700">Photo</label>
-            <input v-model="package.photo" type="text" id="packagePhoto" class="mt-1 p-2 border w-full rounded-md" required />
-          </div>
-          <div class="mb-4">
-            <label for="packagePrice" class="block text-sm font-medium text-gray-700">Prix (CAD)</label>
-            <input v-model="package.price" type="text" id="packagePrice" class="mt-1 p-2 border w-full rounded-md" required />
-          </div>
-          <div class="mb-4">
-            <label for="packageDescription" class="block text-sm font-medium text-gray-700">Description du forfait</label>
-            <textarea v-model="package.description" id="packageDescription" class="mt-1 p-2 border w-full rounded-md" required></textarea>
-          </div>
-          <div class="mb-4">
-            <label for="packageCategory" class="block text-sm font-medium text-gray-700">Categorie du forfait</label>
-            <select v-model="package.categorie" id="packageCategorie" class="mt-1 p-2 border w-full rounded-md" required>
-              <option value="">Selectionne une catégorie</option>
-              <option value="Footwear">Footwear</option>
-              <option value="Accessories">Accessories</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Home Decor">Home Decor</option>
-              <option value="Footwear">Footwear</option>
-              <option value="Beauty">Beauty</option>
-              <option value="Travel Accessories">Travel Accessories</option>
-              <option value="Fashion">Fashion</option>
-            </select>
-          </div>
-          <div class="mb-6">
-            <button type="button" @click="savePackage" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
-              Enregistrer
-            </button>
-          </div>
-        </form>
-      </div>
-      <div>
-        <div class="text-green-600 font-semibold mb-4">Message de success</div>
-        <button class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
-          Nouveau produit
-        </button>
-      </div>
+
+          <button type="button" @click="addImage" :disabled="myPackage.images.length >= 5" class="mt-2 text-blue-600 hover:text-green-600 disabled:opacity-50">
+            + Ajouter une image
+          </button>
+        </div>
+
+        <!-- Aperçu des images -->
+        <div v-if="myPackage.images.length" class="grid grid-cols-3 gap-2 mt-4">
+          <img v-for="(img, i) in myPackage.images" :key="'prev-' + i" :src="img" class="w-full h-24 object-cover rounded-lg border" />
+        </div>
+        <div class="mt-6">
+          <button type="submit" class="btn-jade text-white px-4 py-2 rounded cursor-pointer">Enregistrer</button>
+        </div>
+      </form>
+
+      <div v-if="successMessage" class="text-green-600 font-semibold mt-4">{{ successMessage }}</div>
     </div>
   </div>
 </template>
 
 <script>
-//import ProductDataService from '../services/ProductDataService'
+import PackageDataService from '../services/PackageDataService'
 
 export default {
-  data () {
-
+  props: ['addInv'],
+  data() {
     return {
-      package: {
-        name: "Forfait 1",
-        photo: '',
+      message: null,
+      submitted: false,
+      categories: [],
+      myPackage: {
+        name: '',
+        images: [],
         price: '',
         description: '',
-        category: ''
+        category_id: null
       }
     }
-    
-      
-
   },
-  /*savePackage () {
-      PackageDataService.create(this.package)
-        .then((response) => {
-          // console.log(response.data)
-          this.package.id = response.data.id
-          this.addInv(this.package)
-          this.message = null
-          this.submitted = true
-          // this.$router.push({ name: 'home' })
+  mounted() {
+    // Charger les catégories depuis le backend
+    PackageDataService.getAllCategories()
+      .then(res => {
+        this.categories = res.data
+      })
+      .catch(err => {
+        console.error(err)
+        this.errorMessage = "Impossible de charger les catégories"
+      })
+  },
+  methods: {
+    addImage() {
+      if (this.myPackage.images.length < 5) this.myPackage.images.push('')
+      else alert('Maximum 5 images autorisées.')
+    },
+    removeImage(index) {
+      this.myPackage.images.splice(index, 1)
+    },
+    savePackage() {
+        
+      // Nettoyer les images vides
+      this.myPackage.images = this.myPackage.images.filter(url => url.trim() !== '')
+
+      PackageDataService.create(this.myPackage)
+        .then(res => {
+          this.addInv(res.data)
+          this.message = null 
+          this.submitted = true 
+          this.myPackage = {
+            name: '',
+            images: [],
+            price: '',
+            description: '',
+            category_id: null
+          }
         })
-        .catch((e) => {
-          //  console.log(e)
+        .catch((e)=> {
           this.message = e.response.data.message
         })
-    },
-    newPackage () {
-      this.submitted = false
-      this.package = {}
-    }*/
+    }
   }
-
+}
 </script>

@@ -14,6 +14,9 @@
               <router-link to="/about-us" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">À propos</router-link>
             </li>
             <li>
+              <router-link to="/all-packages" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Tous les forfait</router-link>
+            </li>
+            <li>
               <router-link to="/add-package" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Ajoute un forfait</router-link>
             </li>
           </ul>
@@ -22,7 +25,13 @@
     </nav>
 
     <!-- Vue Router View -->
-    <router-view :inventory="inventory" />
+    <router-view 
+      :inventory="inventory" 
+      :categories="categories" 
+      :addInv="addInventory"
+      :updateInv="updateInventory"
+      :removeInv="removeInventory"
+    />
 
     <!-- Footer -->
     <Footer />
@@ -31,15 +40,40 @@
 
 <script>
 import Footer from './components/MainFooter.vue'
-import myPackage from './myPackage.json'
-
-export default {
+//import myPackage from './myPackage.json'
+import PackageDataService from './services/PackageDataService'
+export default {  
   components: {
     Footer
   },
   data() {
     return {
-      inventory: myPackage
+      inventory: [],
+      categories: [] 
+    }
+  },
+  mounted() {
+  PackageDataService.getAll()
+    .then(res => {
+      this.inventory = res.data
+    })
+    .catch(err => console.error(err))
+
+  PackageDataService.getAllCategories()
+    .then(res => {
+      this.categories = res.data
+    })
+    .catch(err => console.error(err))
+},
+  methods: {
+     addInventory (p) {
+      this.inventory.push(p)
+    },
+    updateInventory (index, data){
+      this.inventory[index] = data
+    },
+    removeInventory (index){
+      this.inventory.splice(index, 1);
     }
   }
 }

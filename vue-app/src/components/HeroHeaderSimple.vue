@@ -1,7 +1,7 @@
 <template>
   <section
     ref="hero"
-    class="hero-header"
+    class="hero-header-simple"
     :style="{
       backgroundImage: isVisible
         ? `url(${imageUrl})`
@@ -69,7 +69,7 @@ const hero = ref(null)
 const isVisible = ref(false)
 const overlayVisible = ref(false)
 const titleVisible = ref(false)
-const imageUrl = 'https://images.pexels.com/photos/772686/pexels-photo-772686.jpeg'
+const imageUrl = 'https://cdn.pixabay.com/photo/2016/04/28/22/47/steak-1359897_640.jpg'
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -132,21 +132,5 @@ onMounted(() => {
   transform: translateY(0);
   opacity: 1;
 }
-
-/* Animation overlay */
-/*.overlay {
-  position: relative;
-  transform: translateY(-150px); /* déplacement plus marqué */
- /* opacity: 0;
-  transition:
-    transform 1.2s cubic-bezier(0.25, 1, 0.5, 1),
-    opacity 1.2s ease;
-  will-change: transform, opacity; /* optimisation GPU */
-/*}*/
-
-/*.overlay.active {
-  transform: translateY(0);
-  opacity: 1;
-}*/
 </style>
 

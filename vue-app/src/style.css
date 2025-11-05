@@ -18,40 +18,8 @@ h1, h2, h3, h4 {
   font-family: 'Cinzel Decorative';
 }
 
-/*h5 {
-  font-family: "Cinzel Decorative";
-}*/
-
-/*.hero-header {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.overlay {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.4);
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-100%); 
-  opacity: 0;
-  transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease;
-}*/
-
 .galerie img {
-  transition: transform 0.3s ease-in-out;
-  
-
+  transition: transform 0.3s ease-in-out; 
 }
 
 .btn-jade {
@@ -68,3 +36,153 @@ h1, h2, h3, h4 {
 .btn-jade:hover {
   background-color: #006f4f; 
 }
+
+.nav-link {
+    background-color: transparent;
+    transition: background-color 0.3s ease;    
+    gap: 20px;
+}
+
+.nav-link a {
+    padding: 8px 18px;
+    background-color: white;    
+    color: black;
+    font-size: 20px;
+    text-decoration: none;
+    border-radius: 3px;    
+}
+
+.nav-link a.active {
+    background-color: rgb(34, 211, 255) !important;  
+    color: white;  
+}
+
+.logo {
+    width: 100px;
+}
+
+.btnAdd {
+    padding: 8px 18px !important;
+    background-color: rgb(34, 211, 255) !important;
+    color: white !important;
+    font-weight: 700; 
+    border-radius: 50px;
+    font-size: clamp(14px, 1vw, 24px);;
+}
+
+.btnAdd:hover {
+    cursor: pointer;
+    background-color: rgb(29, 108, 255) !important;
+}
+
+footer {
+  
+    background-color: rgba(0, 0, 0, 0.808);
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 10px 20px; 
+}
+
+.single-package *+* {
+    margin-top: 10px;
+}
+
+footer a {
+    font-size: clamp(16px, 5vw, 22px);
+    text-decoration: none;
+    color:white;
+}
+
+footer a:hover {
+  color: rgb(34, 211, 255);
+}
+
+.formulaire {
+    width: 600px;
+    background-color: white;
+    margin: 50px auto;
+    border-radius: 10px;
+}
+
+::placeholder {
+    font-size: 14px;
+    color: rgb(129, 129, 129)
+}
+
+hr {
+    border: dotted 1px rgb(34, 211, 255) !important;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.btn-aqua {
+    background-color: rgb(34, 211, 255);
+    & hover {
+        background-color: rgb(3, 116, 145);
+    }
+}
+
+.btn-blue {
+    @apply bg-blue-500 hover:bg-blue-700
+}
+
+.btn-red {
+    @apply bg-red-500 hover:bg-blue-700
+}
+
+.btn-tomato {
+    background-color: tomato;
+    & hover {
+        background-color: rgb(255, 52, 17);
+    }
+}
+
+.form-control label {
+    @apply block mb-2 text-xl font-medium text-black;
+}
+
+.form-control input, select, textarea {
+    @apply bg-gray-50 border border-gray-400 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5; 
+}
+
+
+
+.div-title {
+    background-color: rgba(255, 255, 255, 0.671);
+    padding: 10px 26px;
+    width:fit-content;
+    margin: 100px auto;
+    border-radius: 50px;
+    font-size: 75px;
+}
+
+.grid-container {       
+    margin: 50px auto;
+}
+
+.ligneBasse {
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.ligneBasse p {
+    min-width: 100%;
+    border: 1px dotted rgba(0, 0, 0, 0.911);
+    color: rgba(0, 0, 0, 0.911);
+    overflow: visible;
+    text-align: center;
+    height: 1px;
+}
+
+.ligneBasse p::after {
+    background-color: rgb(255, 255, 255);
+    content: url('https://s2.svgbox.net/octicons.svg?ic=image');
+    padding: 0 10px;
+    position: relative;
+    top: -10px !important;
+    ;
+  }
+
+ 

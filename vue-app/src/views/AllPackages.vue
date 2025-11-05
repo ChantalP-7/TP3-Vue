@@ -3,13 +3,13 @@
     <HeroHeader/>
 
     <h1 class="text-center mt-20 mb-20 text-3xl text-gray-900 dark:text-white">
-      Nos forfaits récents
+      Tous nos forfaits
     </h1>
 
     <div class="grid xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
       <div
-        
-        v-for="(myPackage, i) in recentPackages"
+        v-if="paginatedItems.length > 0"
+        v-for="(myPackage, i) in paginatedItems"
         :key="i"
         class="shadow-lg w-full max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
       >
@@ -36,28 +36,65 @@
           </button>
         </div>
       </div>
-    </div>    
+
+      <div v-else>
+        <p>Aucun forfait disponible pour le moment.</p>
+      </div>
+    </div>
+
+    <!-- Contrôle de la pagination -->
+    <div class="flex justify-center items-center mt-20 mb-20 my-4">
+      <button
+        v-if="currentPage > 1"
+        @click="goToPage(currentPage - 1)"
+        class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-600"
+      >
+        Précédent
+      </button>
+      <span class="mx-4 text-lg">Page {{ currentPage }} sur {{ totalPages }}</span>
+      <button
+        v-if="currentPage < totalPages"
+        @click="goToPage(currentPage + 1)"
+        class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-600"
+      >
+        Suivant
+      </button>
+    </div>
   </div>
 </template>
+
 <script>
 import HeroHeader from '../components/HeroHeader.vue'
-import PackageDataService from '../services/PackageDataService'
+
 export default {
   components: { HeroHeader },
   props: ['inventory'], 
 
   data() {
     return {
-      recentPackages: []
+      currentPage: 1,
+      itemsPerPage: 8
     }
   },
-  mounted() {
-    PackageDataService.getRecent()
-      .then(res => this.recentPackages = res.data)
-      .catch(err => console.error(err))
+
+  computed: {
+    totalPages() {
+      return Math.ceil(this.inventory.length / this.itemsPerPage)
+    },
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.inventory.slice(start, end)
+    }
   },
+
   methods: {   
-       // Méthode pour récupérer la première image
+    goToPage(page) {
+      if (page < 1 || page > this.totalPages) return
+      this.currentPage = page
+    },
+
+    // Méthode pour récupérer la première image
     getFirstImage(images) {
       try {
         if (!images) return ''
