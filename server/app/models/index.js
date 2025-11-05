@@ -9,5 +9,10 @@ const connex = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {}
 db.Sequelize = Sequelize
 db.connex = connex
-db.travels = require('./travel.model.js')(connex, Sequelize)
+db.packages = require('./package.model.js')(connex, Sequelize)
+db.categories = require("./category.model.js")(connex, Sequelize);
+
+db.packages.belongsTo(db.categories, { foreignKey: 'category_id', as: 'category' });
+db.categories.hasMany(db.packages, { foreignKey: 'category_id', as: 'packages' });
+
 module.exports = db

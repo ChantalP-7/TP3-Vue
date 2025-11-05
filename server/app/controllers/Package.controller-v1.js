@@ -1,15 +1,15 @@
 const db = require('../models') 
-const Travel = db.travels
+const Package = db.packages
 
 exports.findAll = (req, res) => {
-   Travel.findAll()
+   Package.findAll()
    .then(data => {
        res.send(data)
    })
    .catch(err => {
        res.status(500).send({
            message:
-           err.message || 'Some error occured'
+           err.message || 'Something go wrong'
        })
    })
 }
@@ -17,11 +17,11 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
    if(!req.body.name) {
        res.status(400).send({
-           message: 'The name is mandatory'
+           message: 'The name is required'
        })
        return;
    }
-   Travel.create(req.body)
+   Package.create(req.body)
    .then(data => {
        res.send(data)
    })
@@ -34,21 +34,22 @@ exports.create = (req, res) => {
 
 exports.findOne = (req, res) => {
    const id = req.params.id
-   Travel.findByPk(id)
+   Package.findByPk(id)
    .then(data => {
-       res.send(data)
-   })
+      if (data) res.send(data)
+      else res.status(404).send({ message: 'Package not found' })
+    })
    .catch(err => {
        res.status(500).send({
            message:
-           err.message || 'Some error occured'
+           err.message || 'Something go wrong'
        })
    })
 }
 
 exports.update = (req, res) => {
    const id = req.params.id
-   Travel.update(req.body, {
+   Package.update(req.body, {
        where: {id: id}
    })
    .then(num => {
@@ -65,14 +66,14 @@ exports.update = (req, res) => {
    .catch(err => {
        res.status(500).send({
            message:
-           err.message || 'Some error occured'
+           err.message || 'Something go wrong'
        })
    })
 }
 
 exports.delete = (req, res) => {
    const id = req.params.id
-   Travel.destroy({
+   Package.destroy({
        where: {id: id}
    })
    .then(num => {
@@ -89,7 +90,7 @@ exports.delete = (req, res) => {
    .catch(err => {
        res.status(500).send({
            message:
-           err.message || 'Some error occured'
+           err.message || 'Something go wrong'
        })
    })
 }
