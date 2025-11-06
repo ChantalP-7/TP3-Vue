@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-    res.json({message: 'Bienvenu dans notre agence 🌼🌹🌺'})
+    res.json({message: 'Bienvenu dans notre agence de voyages 🌼🌹🌺'})
 })
 
 // Base de données

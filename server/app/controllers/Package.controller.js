@@ -12,7 +12,7 @@ exports.findAll = async (req, res) => {
   }
 }
 
-exports.create = (req, res) => {
+/*exports.create = (req, res) => {
 
     if(!req.body.name){
         res.status(400).send({
@@ -30,27 +30,37 @@ exports.create = (req, res) => {
         message: 'Could not insert the data'
         })
     })
-}
+}*/
 
-/*exports.create = async (req, res) => {
+exports.create = async (req, res) => {
   try {
     if (!req.body.name) {
       return res.status(400).send({ message: 'Le nom est obligatoire' })
     }
 
+    let images = req.body.images
+
+    if (typeof images === 'string') {
+      try {
+        images = JSON.parse(images)
+      } catch {
+        images = [images] 
+      }
+    }
+
     const newPackage = await Package.create({
       name: req.body.name,
       description: req.body.description || '',
-      price: req.body.price || 0,
-      category: req.body.category || '',
-      images: req.body.images ? JSON.stringify(req.body.images) : '[]'
+      price: Number(req.body.price) || 0,
+      category: req.body.category_id || null,
+      images: images || []
     })
 
     res.status(201).send(newPackage)
   } catch (err) {
     res.status(500).send({ message: err.message || 'Impossible de créer le forfait' })
   }
-}*/
+}
 
 // Récupérer les 6 forfaits les plus récents
 exports.findRecent = async (req, res) => {
@@ -76,19 +86,65 @@ exports.findOne = async (req, res) => {
   }
 }
 
-exports.update = async (req, res) => {
+/*exports.update = async (req, res) => {
   try {
     const id = req.params.id
+    let images = req.body.images
+
+    if (typeof images === 'string') {
+      try {
+        images = JSON.parse(images)
+      } catch {
+        images = [images]
+      }
+    }
+
     const [updated] = await Package.update(
       {
         name: req.body.name,
         description: req.body.description,
-        price: req.body.price,
+        price: Number(req.body.price),
         category: req.body.category,
-        images: req.body.images ? JSON.stringify(req.body.images) : undefined
+        images: []
       },
       { where: { id } }
     )
+
+    if (updated) {
+      const updatedPackage = await Package.findByPk(id)
+      res.send({ message: 'Forfait mis à jour', package: updatedPackage })
+    } else {
+      res.status(404).send({ message: 'Forfait non trouvé' })
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message || 'Impossible de mettre à jour le forfait' })
+  }
+}*/
+
+exports.update = async (req, res) => {
+  try {
+    const id = req.params.id
+    const updatedFields = {
+      name: req.body.name,
+      description: req.body.description,
+      price: Number(req.body.price),
+      category_id: req.body.category_id
+    }
+
+    // Mettre à jour les images seulement si elles sont présentes
+    if (req.body.images !== undefined) {
+      let images = req.body.images
+      if (typeof images === 'string') {
+        try {
+          images = JSON.parse(images)
+        } catch {
+          images = [images]
+        }
+      }
+      updatedFields.images = images
+    }
+
+    const [updated] = await Package.update(updatedFields, { where: { id } })
 
     if (updated) {
       const updatedPackage = await Package.findByPk(id)

@@ -2,6 +2,7 @@ module.exports = app => {
     const package = require('../controllers/Package.controller.js')
     const router = require('express').Router()
     router.get('/', package.findAll)
+    router.post('/', package.create)
     router.get('/recent', package.findRecent)
     router.get('/:id', package.findOne)
     router.delete('/:id', package.delete)

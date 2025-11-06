@@ -25,8 +25,7 @@ module.exports = (sequelize, connex) => {
       type: connex.INTEGER,
       allowNull: true
     }
-  }, {
-    tableName: 'packages',
+  }, {    
     timestamps: true // crée createdAt / updatedAt
   })
 
