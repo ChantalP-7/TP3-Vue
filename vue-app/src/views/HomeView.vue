@@ -3,10 +3,10 @@
     <HeroHeader/>
 
     <h1 class="text-center mt-20 mb-20 text-3xl text-gray-900 dark:text-white">
-      Nos forfaits récents
+      Nos derniers forfaits
     </h1>
 
-    <div class="grid xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
+    <div class="grid mb-20 xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
       <div
         
         v-for="(myPackage, i) in recentPackages"

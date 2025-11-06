@@ -5,7 +5,7 @@
       <div v-if="errorMessage" class="bg-red-500 mb-2 text-white p-2 rounded">{{ errorMessage }}</div>
       <h4 class="text-xl font-semibold mb-6">Ajoute un forfait</h4>
 
-      <form class="space-y-4" >
+      <form class="space-y-4" @submit.prevent="savePackage">
         <!-- Nom du produit -->
         <div class="form-control mt-5">
           <label for="packageName" class="block text-sm font-medium text-gray-700">Nom du produit</label>
@@ -26,7 +26,7 @@
         <div class="form-control mt-5">          
           <select v-model="myPackage.category_id" id="packageCategory" class="mt-1 p-2 border w-full rounded-md" required>
             <option disabled value="">Sélectionne une catégorie</option>
-            <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.category }}</option>
+            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.category }}</option>
           </select>
         </div>
 
@@ -35,7 +35,7 @@
           <label class="block text-gray-700 mb-2">Images (URLs, max 5)</label>
           <div v-for="(url, index) in myPackage.images" :key="index" class="form-control mt-2 flex items-center gap-2">
             <input
-              v-model="myPackage.images[index]"
+              v-model.trim="myPackage.images[index]"
               type="url"
               placeholder="https://exemple.com/image.jpg"
               class="flex-1 border text-gray-300 text-sm rounded-lg px-3 py-2 focus:ring focus:ring-blue-300"
@@ -50,7 +50,7 @@
 
         <!-- Aperçu des images -->
         <div v-if="myPackage.images.length" class="grid grid-cols-3 gap-2 mt-4">
-          <img v-for="(img, i) in myPackage.images" :key="'prev-' + i" :src="img" class="w-full h-24 object-cover rounded-lg border" />
+          <img v-for="(img, i) in myPackage.images" :key="'prev-' + i" :src="img" class="w-full h-24 object-cover rounded-lg" />
         </div>
         <div class="mt-6">
           <button type="submit" class="btn-jade text-white px-4 py-2 rounded cursor-pointer">Enregistrer</button>
@@ -68,9 +68,7 @@ import PackageDataService from '../services/PackageDataService'
 export default {
   props: ['addInv'],
   data() {
-    return {
-      message: null,
-      submitted: false,
+    return {      
       categories: [],
       myPackage: {
         name: '',
@@ -78,11 +76,12 @@ export default {
         price: '',
         description: '',
         category_id: null
-      }
+      },
+      errorMessage: '',
+      successMessage: ''
     }
   },
-  mounted() {
-    // Charger les catégories depuis le backend
+  mounted() {    
     PackageDataService.getAllCategories()
       .then(res => {
         this.categories = res.data
@@ -100,27 +99,43 @@ export default {
     removeImage(index) {
       this.myPackage.images.splice(index, 1)
     },
-    savePackage() {
-        
-      // Nettoyer les images vides
-      this.myPackage.images = this.myPackage.images.filter(url => url.trim() !== '')
+    async savePackage() {
 
-      PackageDataService.create(this.myPackage)
-        .then(res => {
-          this.addInv(res.data)
-          this.message = null 
-          this.submitted = true 
-          this.myPackage = {
-            name: '',
-            images: [],
-            price: '',
-            description: '',
-            category_id: null
-          }
-        })
-        .catch((e)=> {
-          this.message = e.response.data.message
-        })
+      this.errorMessage = ''
+      this.successMessage = ''
+
+      // Nettoyer les images vides et les doublons
+      this.myPackage.images = [... new Set(this.myPackage.images.filter(url => url.trim() !== ''))]
+
+      // Validation des champs requis
+      if (!this.myPackage.name || !this.myPackage.price || !this.myPackage.description || !this.myPackage.category_id) {
+          this.errorMessage = "Veuillez remplir tous les champs requis.";
+          return;
+        }
+
+      // Validation du nombres d'images maximal
+
+      if (this.myPackage.images.length > 5) {
+        this.errorMessage = "Vous ne pouvez pas ajouter plus de 5 images."
+        return
+      }
+
+      // Validation du prix (doit être un nombre)
+      if (isNaN(Number(this.myPackage.price)) || Number(this.myPackage.price) <= 0) {
+        this.errorMessage = "Veuillez entrer un prix valide.";
+        return;
+      }
+
+      try {
+        const res = await PackageDataService.create(this.myPackage)
+        this.addInv && this.addInv(res.data)
+        this.successMessage = "Forfait ajouté avec succès !"
+        // Réinitialiser le formulaire
+        this.myPackage = { name: '', images: [], price: null, description: '', category_id: null }
+      } catch (e) {
+        console.error(e)
+        this.errorMessage = "Erreur lors de l’enregistrement."
+      }
     }
   }
 }

@@ -2,34 +2,33 @@
     <div>
     <HeroHeader/>
   <div class="min-h-screen flex items-center justify-center border-t border-gray-100">
-    <div class="formulaire border mt-2 p-6 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3">
-      <div v-if="message" class="bg-red-500 mb-2 text-white p-2 rounded">{{ message }}</div>
-      <h2 class="text-2xl font-semibold mb-6">Édite le forfait</h2>
-      <div v-if="!submitted">
-            <form @submit.prevent="savePackage" class="">
+    <div class="formulaire border mt-2 p-6 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3">      
+      <h2 class="text-2xl font-semibold mb-6">Édite le forfait</h2>      
+            <form @submit.prevent="savePackage">
                 <div class="mb-4">
-                    <label for="myPackageName" class="block text-sm font-medium text-gray-700">Name</label>
+                    <label for="myPackageName" class="block text-sm font-xlarge text-gray-900">Name</label>
                     <input v-model="myPackage.name" type="text" id="myPackageName" class="mt-1 p-2 border w-full rounded-md" required />
                 </div>          
                 <div class="mb-4">
-                    <label for="myPackagePrice" class="block text-sm font-medium text-gray-700">Price (CAD)</label>
+                    <label for="myPackagePrice" class="block text-sm font-md text-gray-700">Price (CAD)</label>
                     <input v-model.number="myPackage.price" type="text" id="myPackagePrice" class="mt-1 p-2 border w-full rounded-md" required />
                 </div>
                 <div class="mb-4">
-                    <label for="myPackageDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                    <label for="myPackageDescription" class="block text-sm font-md text-gray-900">Description</label>
                     <textarea v-model="myPackage.description" id="myPackageDescription" rows="8" class="mt-1 p-2 border w-full rounded-md" required></textarea>
                 </div>
-                <div class="form-control mt-5">            
+                <div class="form-control mt-5">  
+                  <label class="font-medium text-gray-700" for="">sélectionne une catégorie</label>          
                     <select v-model="myPackage.category_id" id="myPackageCategorie" class="select-form mt-1 p-2 border w-full rounded-md" required>
-                        <option disabled value="">Sélectionne une catégorie</option>
-                        <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.category }}</option>
+                        <option name disabled value="" selected>Sélectionne une catégorie</option>
+                        <option class="cursor-pointer" v-for="c in categories" :key="c.id" :value="c.id">{{ c.category }}</option>
                     </select>
                     </div> 
                     <div class="ligneBasse">
                         <p></p>
                     </div>         
                 <div>
-                <label class="block text-gray-700 mb-2">Images URLs - maximum 5</label>
+                <label class="block b-2">Entre des images URLs - maximum 5</label>
                 <div v-for="(url, index) in myPackage.images" :key="index" class="form-control mt-5 flex items-center gap-2 mb-2">
                     <input
                         v-model="myPackage.images[index]"
@@ -40,7 +39,7 @@
                     <button
                         type="button"
                         @click="removeImage(index)"
-                        class="bg-red-500 text-white rounded-full px-2 py-1 text-sm hover:bg-red-600"
+                        class="bg-red-500 text-white rounded-full px-2 py-1 text-sm hover:bg-red-600 cursor-pointer"
                     >
                         ✕
                     </button>
@@ -66,15 +65,13 @@
                     />
                 </div> 
                 <div class="mt-6">
-          <button type="submit" class="btn-jade text-white px-4 py-2 rounded cursor-pointer">Enregistrer</button>
+          <button type="submit" @click="updatePackage" class="btn-jade text-white px-4 py-2 rounded cursor-pointer">Enregistrer</button>
+          <div v-if="message" class="text-green-600 font-semibold mt-4">{{ message }}</div>
         </div>         
             </form>
       </div>
-      <div v-else>
-            <div class="text-green-600 font-semibold mb-4">Forfait modifié !</div>
-      </div>
+      
     </div>
-  </div>
   </div>
 </template>
 <script>
@@ -94,7 +91,7 @@ components: { HeroHeader },
         description: '',
         images: [],
         category_id: null
-      },
+      },       
       categories: [],
       id: parseInt(this.$route.params.id)
     }
@@ -117,6 +114,23 @@ components: { HeroHeader },
       return index
     }
   },
+  methods: {
+    removeImage(index) {
+      this.myPackage.images.splice(index, 1)
+    },
+    updatePackage () {
+        PackageDataService.update(this.id ,this.myPackage)
+        .then((response) => {
+         // console.log(response.data)
+          this.updateInv(this.myPackageIndex, this.myPackage )
+          this.message = "Forfait ajouté avec succès !"
+          this.submitted = true    
+        })
+        .catch((e)=> {
+          this.message = e.response.data.message
+        })
+    },
+  }
   
 }
 </script>

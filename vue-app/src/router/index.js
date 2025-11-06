@@ -7,9 +7,6 @@ import AllPackages from '../views/AllPackages.vue'
 import AboutUs from '../views/AboutUs.vue'
 import EditPackage from '../views/EditPackage.vue'
 import PackageView from '../views/PackageView.vue'
-/*import UserView from '../views/UserView.vue'
-import LoginView from '../views/LoginView.vue'
-import IndexUserView from '../views/IndexUserView.vue'*/
 
 const routes = [
   { path: '/', name: 'home', component: Home },

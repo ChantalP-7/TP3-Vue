@@ -38,12 +38,12 @@
        <strong>Catégorie : </strong> {{ getCategoryName(myPackage) }}
       </p>
       <div className="mt-10 flex justify-start gap-15 items-center">
-            <button type="submit" @click="updatePackage" class="btn-blue text-white px-4 py-2 rounded-3xl cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-pencil-square py-0 px-1" viewBox="0 0 16 16">
+            <button type="submit" @click="goToEditPage(myPackage.id)" class="btn-blue text-white px-4 py-2 rounded-3xl cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-pencil-square py-0 px-1" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg></button>
             
-            <button type="button" @click="deletePackage" class="btn-tomato text-white px-4 py-2 rounded-3xl cursor-pointer hover:bg-red-600">
+            <button type="submit" @click="deletePackage(myPackage.id)" class="btn-tomato text-white px-4 py-2 rounded-3xl cursor-pointer hover:bg-red-600">
                 <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" color="#red"><path d="M0 0h24v24H0z" fill="none"></path><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
             </button>
         </div>
@@ -57,11 +57,12 @@
 </template>
 
 <script>
+import PackageDataService from '../services/PackageDataService'
+
 export default {
   props: {
     inventory: Array,
-    categories: Array,
-     
+    categories: Array,     
   },
   data() {
     return {
@@ -110,31 +111,22 @@ export default {
         this.currentIndex++;
       }
     },
-    methods: {
-    updatePackage () {
-        PackageDataService.update(this.id ,this.myPackage)
-        .then((response) => {
-         // console.log(response.data)
-          this.updateInv(this.myPackageIndex, this.myPackage )
-          this.message = null 
-          this.submitted = true    
-        })
-        .catch((e)=> {
-          this.message = e.response.data.message
-        })
+    
+    goToEditPage(id) {
+        this.$router.push({ name: 'edit-package', params: { id } })
     },
-    deletePackage () {
-      PackageDataService.delete(this.id)
-       .then(response => {
-        this.remove(this.myPackage.name)
-        this.removeInv(this.myPackageIndex)
-        this.$router.push({ name: 'home' })
-       })
-       .catch((e) => {
-        this.message = e.response.data.message
-       })
+    async deletePackage(id) {
+      if (!confirm('Voulez-vous vraiment supprimer ce forfait ?')) return
+
+      try {
+        await PackageDataService.delete(id)
+        alert('Le forfait a été supprimé avec succès.')
+        this.$router.push({ name: 'home' }) // retour à la page principale
+      } catch (error) {
+        console.error(error)
+        this.message = error.response?.data?.message || "Erreur lors de la suppression"
+      }
     }
-  }
   }
 }
 </script>

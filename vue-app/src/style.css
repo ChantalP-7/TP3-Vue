@@ -2,11 +2,11 @@
 @import "tailwindcss";
 
 
-/*.hero-header {
+.hero-header-simple {
     background-image: url('https://images.pexels.com/photos/772686/pexels-photo-772686.jpeg');
     background-size: cover;
     background-position: center;
-}*/
+}
 
 body {
   font-family: "Poppins", sans-serif;
