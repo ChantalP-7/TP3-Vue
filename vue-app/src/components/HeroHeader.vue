@@ -9,7 +9,7 @@
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       height: '500px',
-      transition: 'background-image 0.8s ease-in-out'
+      transition: 'background-image 0.6s ease-in-out'
     }"
   >
     <div class="py-8 px-4 mx-auto lg:py-16 lg:px-6">

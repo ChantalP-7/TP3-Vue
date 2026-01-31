@@ -1,6 +1,6 @@
 <template>
     <div>
-    <HeroHeader/>
+    <HeroHeaderSimple />
   <div class="min-h-screen flex items-center justify-center border-t border-gray-100">
     <div class="formulaire border mt-2 p-6 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3">      
       <h2 class="text-2xl font-semibold mb-6">Édite le forfait</h2>      
@@ -75,11 +75,11 @@
   </div>
 </template>
 <script>
-import HeroHeader from '../components/HeroHeader.vue'
+import HeroHeaderSimple from '../components/HeroHeaderSimple.vue'
 import PackageDataService from '../services/PackageDataService'
 
 export default {
-components: { HeroHeader },
+components: { HeroHeaderSimple },
   props:['inventory', 'updateInv', 'removeInv', 'remove'],
   data () {
     return{
@@ -102,9 +102,20 @@ components: { HeroHeader },
     .catch(err => console.error(err))
 
   PackageDataService.get(this.id)
-    .then(response => {
-      this.myPackage = response.data
-    })
+  .then(response => {
+    const data = response.data
+
+    if (typeof data.images === 'string') {
+      try {
+        data.images = JSON.parse(data.images)
+      } catch (e) {
+        console.error('JSON images invalide', e)
+        data.images = []
+      }
+    }
+
+    this.myPackage = data
+  })
 },
   computed: {
    myPackageIndex () {

@@ -17,13 +17,14 @@
           class="object-cover aspect-[3/2] p-0 rounded-t-lg"
           :src="getFirstImage(myPackage.images)"
           alt="myPackage image"
+          loading="lazy"
         />
         <div class="px-5 pb-5">
           <h5 class="text-xl font-semibold tracking-tight mt-5 text-gray-900 dark:text-white mb-2">
             {{ myPackage.name }}
           </h5>
           <p class="text-lg text-gray-900 dark:text-white">
-            <strong>Prix : </strong>{{ myPackage.price.toFixed(2) }} $
+            <strong>Prix : </strong>{{ Number(myPackage.price).toFixed(2) }} $
           </p>
           
           <button class="btn-jade mt-5">

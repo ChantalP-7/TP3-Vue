@@ -1,5 +1,7 @@
 <template>
+<HeroHeaderSimple />
   <div class="min-h-screen flex items-center justify-center border-t border-gray-300">
+  
     <div class="grid-container border border-gray-300 mt-2 p-6 rounded-md md:w-2/3 lg:w-1/2 xl:w-1/3">
       
       <div v-if="errorMessage" class="bg-red-500 mb-2 text-white p-2 rounded">{{ errorMessage }}</div>
@@ -63,9 +65,11 @@
 </template>
 
 <script>
+import HeroHeaderSimple from '../components/HeroHeaderSimple.vue'
 import PackageDataService from '../services/PackageDataService'
 
 export default {
+  components: { HeroHeaderSimple },
   props: ['addInv'],
   data() {
     return {      
@@ -100,42 +104,33 @@ export default {
       this.myPackage.images.splice(index, 1)
     },
     async savePackage() {
+        this.errorMessage = ''
+        this.successMessage = ''
 
-      this.errorMessage = ''
-      this.successMessage = ''
+        // Nettoyer les images vides et les doublons
+        this.myPackage.images = [...new Set(this.myPackage.images.filter(url => url.trim() !== ''))]
 
-      // Nettoyer les images vides et les doublons
-      this.myPackage.images = [... new Set(this.myPackage.images.filter(url => url.trim() !== ''))]
-
-      // Validation des champs requis
-      if (!this.myPackage.name || !this.myPackage.price || !this.myPackage.description || !this.myPackage.category_id) {
-          this.errorMessage = "Veuillez remplir tous les champs requis.";
-          return;
+         // Créer le payload correctement
+        const payload = {
+            ...this.myPackage,
+            price: Number(this.myPackage.price),
+            category_id: Number(this.myPackage.category_id),
+            images: Array.from(this.myPackage.images)  // transforme Proxy en array natif
         }
 
-      // Validation du nombres d'images maximal
+        // Log pour déboguer
+        console.log('Payload envoyé au serveur:', payload)
 
-      if (this.myPackage.images.length > 5) {
-        this.errorMessage = "Vous ne pouvez pas ajouter plus de 5 images."
-        return
-      }
-
-      // Validation du prix (doit être un nombre)
-      if (isNaN(Number(this.myPackage.price)) || Number(this.myPackage.price) <= 0) {
-        this.errorMessage = "Veuillez entrer un prix valide.";
-        return;
-      }
-
-      try {
-        const res = await PackageDataService.create(this.myPackage)
+        try {
+        
+        const res = await PackageDataService.create(payload)
         this.addInv && this.addInv(res.data)
         this.successMessage = "Forfait ajouté avec succès !"
-        // Réinitialiser le formulaire
-        this.myPackage = { name: '', images: [], price: null, description: '', category_id: null }
-      } catch (e) {
-        console.error(e)
-        this.errorMessage = "Erreur lors de l’enregistrement."
-      }
+        this.myPackage = { name: '', images: [], price: '', description: '', category_id: null }
+        } catch (e) {
+        console.error('Erreur serveur:', e.response?.data || e)
+        this.errorMessage = e.response?.data?.message || "Erreur lors de l’enregistrement."
+        }
     }
   }
 }

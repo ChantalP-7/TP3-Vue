@@ -1,6 +1,6 @@
 <template>
     <div>
-        <HeroHeader/>
+        <HeroHeaderSimple/>
         
     </div>
     <div class="mt-10 mb-10">
@@ -11,10 +11,10 @@
 
 </template>
 <script>
-import HeroHeader from '../components/HeroHeader.vue'
+import HeroHeaderSimple from '../components/HeroHeaderSimple.vue'
 export default {
   components: {
-    HeroHeader
+    HeroHeaderSimple
   }
 }
   </script>

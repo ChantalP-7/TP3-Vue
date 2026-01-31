@@ -32,48 +32,59 @@ exports.findAll = async (req, res) => {
     })
 }*/
 
-exports.create = async (req, res) => {
-  try {
-    if (!req.body.name) {
-      return res.status(400).send({ message: 'Le nom est obligatoire' })
+
+    exports.create = async (req, res) => {
+    try {
+        console.log('REQ BODY:', req.body)
+
+        const categoryId = Number(req.body.category_id)
+
+        if (!req.body.name) {
+        return res.status(400).send({ message: 'Le nom est obligatoire' })
+        }
+
+        if (!categoryId) {
+        return res.status(400).send({ message: 'Catégorie invalide' })
+        }
+
+        let images = req.body.images
+        if (typeof images === 'string') {
+        try {
+            images = JSON.parse(images)
+        } catch {
+            images = []
+        }
+        }
+
+        console.log(req.body.category_id)
+        
+        const newPackage = await Package.create({
+        name: req.body.name,
+        description: req.body.description || '',
+        price: Number(req.body.price) || 0,
+        category_id: categoryId,
+        images
+        })
+
+        res.status(201).send(newPackage)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send({ message: err.message })
+    }
     }
 
-    let images = req.body.images
-
-    if (typeof images === 'string') {
-      try {
-        images = JSON.parse(images)
-      } catch {
-        images = [images] 
-      }
+    // Récupérer les 6 forfaits les plus récents
+    exports.findRecent = async (req, res) => {
+        try {
+            const recentPackages = await Package.findAll({
+            order: [['createdAt', 'DESC']], 
+            limit: 6 
+            })
+            res.json(recentPackages)
+        } catch (err) {
+            res.status(500).json({ message: err.message })
+        }
     }
-
-    const newPackage = await Package.create({
-      name: req.body.name,
-      description: req.body.description || '',
-      price: Number(req.body.price) || 0,
-      category: req.body.category_id || null,
-      images: images || []
-    })
-
-    res.status(201).send(newPackage)
-  } catch (err) {
-    res.status(500).send({ message: err.message || 'Impossible de créer le forfait' })
-  }
-}
-
-// Récupérer les 6 forfaits les plus récents
-exports.findRecent = async (req, res) => {
-  try {
-    const recentPackages = await Package.findAll({
-      order: [['createdAt', 'DESC']], 
-      limit: 6 
-    })
-    res.json(recentPackages)
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
-}
 
 exports.findOne = async (req, res) => {
   try {
