@@ -2,7 +2,7 @@
 
 Application web full-stack permettant de gérer des forfaits de voyage (consultation, ajout, modification et suppression), développée avec Vue.js côté client et Node.js côté serveur.
 
-Le projet est divisé en trois parties principales : Frontend, Backend et Base de données.TP3 Projet de gestion de forfaits de voyage
+Le projet est divisé en trois parties principales : Frontend, Backend et Base de données.
 
 # Technologies utilisées
 
@@ -84,9 +84,9 @@ DB_NAME=nom_de_la_db
 ## Architecture cloud :
 
 Vue (Netlify)
-   ↓ Axios
+   → Axios
 Node / Express (Render)
-   ↓ Sequelize
+   → Sequelize
 MySQL (Railway)
 
 
