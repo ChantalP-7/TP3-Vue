@@ -13,19 +13,19 @@ class PackageDataService {
     }
 
     update (id, data) {
-        return http.put(`/packages/${id}`, data)
+        return http.put(`packages/${id}`, data)
     }
 
     delete (id) {
-        return http.delete(`/packages/${id}`)
+        return http.delete(`packages/${id}`)
     }
     
     getAllCategories() {
-        return http.get("/categories");
+        return http.get("categories");
     }
 
     getRecent() {
-    return http.get('/packages/recent')
+    return http.get('packages/recent')
     }
 }
 export default new PackageDataService()
