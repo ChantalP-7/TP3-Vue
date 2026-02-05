@@ -1,15 +1,15 @@
 import http from '../http-common'
 class PackageDataService {
     getAll () {
-        return http.get('/packages')
+        return http.get('packages')
     }
 
     create (data) {
-        return http.post('/packages', data)
+        return http.post('packages', data)
     }
 
     get (id) {
-        return http.get(`/packages/${id}`)
+        return http.get(`packages/${id}`)
     }
 
     update (id, data) {
