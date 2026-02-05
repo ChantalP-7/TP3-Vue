@@ -5,7 +5,10 @@ const cors = require('cors')
 const app = express()
 
 const corsOption = {
-    origin: 'http://localhost:5173',
+    origin: [
+    "http://localhost:5173",
+    "https://tp3-vue-front.onrender.com"
+  ],
     credentials: true,
 }
 
