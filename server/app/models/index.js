@@ -1,7 +1,6 @@
 require('dotenv').config()
 
 const dbConfig = require('../config/db.config.js')
-console.log("DB_URL =", process.env.DB_URL)
 
 const { Sequelize } = require('sequelize')
 
