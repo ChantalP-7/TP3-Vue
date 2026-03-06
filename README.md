@@ -73,13 +73,17 @@ DB_USER=root
 DB_PASSWORD=
 DB_NAME=nom_de_la_db
 
+* Finalement, changé pour Supabase : 
+
+DB_URL=postgresql://postgres:MON_PASSWORD@MON_HOST:5432/postgres
+
 ## Déploiement
 
 - Frontend : Netlify
 
 - Backend : Render
 
-- Base de données : Railway (MySQL)
+- Base de données : Railway (MySQL), finalement remplacé par Supabase (PostgreSQL) pour des raisons de gratuité pour mon portefolio
 
 ## Architecture cloud :
 
@@ -87,7 +91,8 @@ Vue (Netlify)
    → Axios
 Node / Express (Render)
    → Sequelize
-MySQL (Railway)
+
+PostgreSQL (Supabase)
 
 
 ## Objectifs pédagogiques

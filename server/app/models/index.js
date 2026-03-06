@@ -1,14 +1,15 @@
+require('dotenv').config()
+
 const dbConfig = require('../config/db.config.js')
+console.log("DB_URL =", process.env.DB_URL)
+
 const { Sequelize } = require('sequelize')
 
-const connex = new Sequelize(
-  dbConfig.DB,
-  dbConfig.USER,
-  dbConfig.PASSWORD,
-  {
-    host: dbConfig.HOST,
-    dialect: dbConfig.dialect,
-    port: dbConfig.PORT
+const connex = new Sequelize(dbConfig.DB_URL, {
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: { rejectUnauthorized: false }
+    }
   }
 )
 

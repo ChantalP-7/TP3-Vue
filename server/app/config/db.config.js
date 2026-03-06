@@ -1,8 +1,3 @@
 module.exports = {
-  HOST: process.env.DB_HOST,
-  USER: process.env.DB_USER,
-  PASSWORD: process.env.DB_PASSWORD,
-  DB: process.env.DB_DATABASE,
-  dialect: "mysql",
-  PORT: process.env.DB_PORT || 3306
+  DB_URL: process.env.DB_URL // URL complète PostgreSQL Supabase
 };
