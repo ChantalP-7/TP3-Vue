@@ -1,12 +1,22 @@
 <template>
   <div>
     <HeroHeader/>
+    <div v-if="loading" class="render-loader">
+		<div class="render-dots">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
 
-    <h1 class="text-center mt-20 mb-20 text-3xl text-gray-900 dark:text-white">
-      Nos derniers forfaits
+		<p class="render-text">	
+			Chargement des forfaits récent ...
+			Premier démarrage plus lent (serveur gratuit) 😉			
+		</p>
+	</div>
+    <h1 v-if="!loading" class="text-center mt-20 mb-20 text-3xl text-gray-900 dark:text-white">
+      Nos 6 récents forfaits
     </h1>
-
-    <div class="grid mb-20 xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
+	<div v-if="!loading" class="grid mb-20 xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
       <div
         
         v-for="(myPackage, i) in recentPackages"
@@ -49,13 +59,20 @@ export default {
 
   data() {
     return {
-      recentPackages: []
+      recentPackages: [],
+	  loading: true
     }
   },
   mounted() {
     PackageDataService.getRecent()
-      .then(res => this.recentPackages = res.data)
-      .catch(err => console.error(err))
+      .then(res => {
+      this.recentPackages = res.data
+      this.loading = false
+    })
+    .catch(err => {
+      console.error(err)
+      this.loading = false
+    })
   },
   methods: {   
        // Méthode pour récupérer la première image
