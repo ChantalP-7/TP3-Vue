@@ -76,7 +76,8 @@
     computed: {
         // Récupère le produit avec l'ID à partir de l'URL
          myPackage() {
-            const pkgId = Number(this.$route.params.id)
+            const pkgId = this.$route.params.id
+            //const pkgId = Number(this.$route.params.id)
             const pkg = this.inventory.find(p => p.id === pkgId)
             if (!pkg) return null
             return {
