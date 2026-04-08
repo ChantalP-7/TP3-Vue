@@ -56,6 +56,31 @@
     <div v-else>
         <p>Le produit n'a pas été trouvé.</p>
     </div>  
+    <transition name="fade">
+	<div 
+		v-if="showModal" 
+		class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+		@click.self="showModal = false"
+	>
+		<div class="bg-white p-6 rounded-2xl shadow-lg max-w-md text-center transform transition-all duration-300 scale-100 transform transition-all duration-300 scale-95">
+		
+		<h2 class="text-xl font-bold mb-4">Projet étudiant (simulation)</h2>
+		
+		<p class="mb-4">
+			Ce projet est une démonstration.  
+			La suppression n'est pas possible.
+		</p>
+
+		<button 
+			@click="showModal = false"
+			class="btn-jade text-white px-4 py-2 rounded cursor-pointer"
+		>
+			Fermer
+		</button>
+
+		</div>
+	</div>
+</transition>
 </template>
 
 <script>
@@ -70,6 +95,10 @@
         },
         data() {
             return {
+
+            showModal: false,
+			isSubmitting: false, 
+
             currentIndex: 0  // Initialisation de l'index de l'image
         }
     },
@@ -100,11 +129,11 @@
     },
     methods: {
         getCategoryName(pkg) {
-        if (!pkg || !this.categories) return 'Non spécifiée'
-        
-        const cat = this.categories.find(c => c.id === pkg.category_id)
-        return cat ? cat.category : 'Non spécifiée'
-    },
+            if (!pkg || !this.categories) return 'Non spécifiée'
+            
+            const cat = this.categories.find(c => c.id === pkg.category_id)
+            return cat ? cat.category : 'Non spécifiée'
+        },
         showImage(image, index) {
             // Met à jour l'image courante lorsque l'on clique sur une image de la galerie
             this.currentIndex = index;
@@ -125,18 +154,21 @@
             goToEditPage(id) {
                 this.$router.push({ name: 'edit-package', params: { id } })
             },
-            async deletePackage(id) {
-            if (!confirm('Voulez-vous vraiment supprimer ce forfait ?')) return
+            /*async deletePackage(id) {
+                if (!confirm('Voulez-vous vraiment supprimer ce forfait ?')) return
 
-            try {
-                await PackageDataService.delete(id)
-                alert('Le forfait a été supprimé avec succès.')
-                this.$router.push({ name: 'home' }) // retour à la page principale
-            } catch (error) {
-                console.error(error)
-                this.message = error.response?.data?.message || "Erreur lors de la suppression"
+                try {
+                    await PackageDataService.delete(id)
+                    alert('Le forfait a été supprimé avec succès.')
+                    this.$router.push({ name: 'home' }) // retour à la page principale
+                } catch (error) {
+                    console.error(error)
+                    this.message = error.response?.data?.message || "Erreur lors de la suppression"
+                }
+            }*/
+            deletePackage(id) {
+                this.showModal = true
             }
         }
-    }
     }
 </script>
