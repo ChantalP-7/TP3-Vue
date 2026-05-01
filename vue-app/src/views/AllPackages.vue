@@ -28,7 +28,7 @@
             </p>            
             <router-link
             :to="{ name: 'package', params: { id: myPackage.id } }"
-            class="text-white cursor-pointer hover:underline btn-jade mt-5"
+            class="text-white cursor-pointer hover:underline btn-jade mt-10"
             >
             Voir
             </router-link>
