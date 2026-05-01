@@ -164,8 +164,11 @@ hr {
     font-size: 75px;
 }
 
-.grid-container {       
-    margin: 50px auto;
+.grid-container {
+    flex-grow: 1;    
+    margin: 50px auto;    
+    gap: 50px;
+    padding: 20px;
 }
 
 .ligneBasse {
