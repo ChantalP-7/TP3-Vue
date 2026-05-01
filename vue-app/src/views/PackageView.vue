@@ -1,25 +1,25 @@
 <template>
     <HeroHeaderSimple />
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div v-if="myPackage" class="flex flex-col lg:flex-row p-6 items-center lg:items-start mt-10">
+        <div v-if="myPackage" class="flex flex-col lg:flex-row items-center lg:items-start mt-10 gap-8">
             
-            <div class="lg:w-1/2 mb-5 lg:mb-5 p-6 ">
-            <!-- Affichage de l'image principale -->
-            <img class="w-full mb-5 lg:mb-0" :src="currentImage" :alt="myPackage.name" loading="lazy"/>
-            
+            <div class="lg:w-1/2 w-full mb-5 lg:mb-5 ">
+                <!-- Affichage de l'image principale -->
+                <img class="w-full mb-5 lg:mb-0" :src="currentImage" :alt="myPackage.name" loading="lazy"/>
+                
 
-            <!-- Galerie d'images -->
-            <div class="galerie mt-4 flex space-x-4 overflow-x-auto">
-                <img 
-                v-for="(image, index) in myPackage.images.slice(1, 5)" 
-                :key="index" 
-                class="w-24 h-24 object-cover cursor-pointer border-2 border-gray-300 rounded-md"
-                :src="image" 
-                :alt="`Image ${index + 1}`"
-                @click="showImage(image, index + 1)" 
-                loading="lazy" 
-                />
-            </div>
+                <!-- Galerie d'images -->
+                <div class="galerie mt-4 flex space-x-4 overflow-x-auto">
+                    <img 
+                    v-for="(image, index) in myPackage.images.slice(1, 5)" 
+                    :key="index" 
+                    class="w-24 h-24 object-cover cursor-pointer border-2 border-gray-300 rounded-md"
+                    :src="image" 
+                    :alt="`Image ${index + 1}`"
+                    @click="showImage(image, index + 1)" 
+                    loading="lazy" 
+                    />
+                </div>
 
             <!-- Navigation entre les images -->
                 <div class="flex justify-start gap-50 mt-4">
@@ -29,7 +29,7 @@
                 
             </div>
 
-            <div class="lg:w-1/2 p-6 ">
+            <div class="lg:w-1/2 w-full">
             
             <h1 class="text-2xl lg:text-3xl mb-3">{{ myPackage.name }}</h1>
             <div class="text-lg mb-5">

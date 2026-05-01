@@ -6,15 +6,15 @@
         Tous nos forfaits
         </h1>
 
-        <div class="grid grid-cols-1 gap-5 xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
         <div
             v-if="paginatedItems.length > 0"
             v-for="(myPackage, i) in paginatedItems"
             :key="i"
-            class="shadow-lg w-full max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
+            class="shadow-lg w-full bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
         >
             <img
-            class="object-cover aspect-[3/2] p-0 rounded-t-lg"
+            class="w-full object-cover aspect-[3/2] p-0 rounded-t-lg"
             :src="getFirstImage(myPackage.images)"
             alt="myPackage image"
             loading="lazy"
@@ -25,16 +25,13 @@
             </h5>
             <p class="text-lg text-gray-900 dark:text-white">
                 <strong>Prix : </strong>{{ Number(myPackage.price).toFixed(2) }} $
-            </p>
-            
-            <button class="btn-jade mt-5">
-                <router-link
-                :to="{ name: 'package', params: { id: myPackage.id } }"
-                class="text-white cursor-pointer hover:underline"
-                >
-                Voir
-                </router-link>
-            </button>
+            </p>            
+            <router-link
+            :to="{ name: 'package', params: { id: myPackage.id } }"
+            class="text-white cursor-pointer hover:underline btn-jade mt-5"
+            >
+            Voir
+            </router-link>
             </div>
         </div>
 
