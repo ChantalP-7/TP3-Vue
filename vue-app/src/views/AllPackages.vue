@@ -25,13 +25,15 @@
             </h5>
             <p class="text-lg text-gray-900 dark:text-white">
                 <strong>Prix : </strong>{{ Number(myPackage.price).toFixed(2) }} $
-            </p>            
-            <router-link
-            :to="{ name: 'package', params: { id: myPackage.id } }"
-            class="text-white cursor-pointer hover:underline btn-jade mt-10"
-            >
-            Voir
-            </router-link>
+            </p> 
+            <button class="btn-jade mt-5">                       
+                <router-link
+                :to="{ name: 'package', params: { id: myPackage.id } }"
+                class="text-white cursor-pointer hover:underline"
+                >
+                Voir
+                </router-link>
+            </button>
             </div>
         </div>
 
