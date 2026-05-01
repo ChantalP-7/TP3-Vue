@@ -16,7 +16,7 @@
     <h1 v-if="!loading" class="text-center mt-20 mb-20 text-3xl text-gray-900 dark:text-white">
       Nos 6 récents forfaits
     </h1>
-	<div v-if="!loading" class="grid mb-20 xs:gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10 border-gray-100 my-4">
+	<div v-if="!loading" class="grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 border-gray-100 my-4">
       <div
         
         v-for="(myPackage, i) in recentPackages"
